@@ -299,13 +299,43 @@ If RailWatch were a real product moving toward production, the following capabil
 
 ---
 
+## Design Phase Log
+
+### design.md — Completed
+
+The design document was built section by section with explicit approval gates between sections. All 8 sections are complete.
+
+| Section | Content |
+|---------|---------|
+| 1. Component Architecture | Full React component tree, DataProvider interface, SimulatorDataProvider implementation, useDataProvider hook, data flow boundary diagram |
+| 2. Data Models | TypeScript interfaces for all Glossary types: Transaction (ISO 20022), ExceptionGroup, RailData, SettlementPosition, CutOffTime, HistoricalVolumeEntry. SimulatorSeedConfig + DEFAULT_SEED_CONFIG. FEDERAL_HOLIDAYS constant (2025–2026, OPM sourced). Reason code reference table. |
+| 3. API Integration Patterns | FRED endpoint + response mapping + 24h/4h cache strategy. Frankfurter on-demand per-currency session cache. Marketaux monthly counter key pattern + conditional rail surfacing. Error message matrix (3 APIs × 3 error types = 9 messages). |
+| 4. State Management | React state inventory (17 state variables). Complete LocalStorage key inventory. Schema version + migration strategy. First-run overlay trigger logic. UserPreferences interface. Marketaux counter flow. React state vs LocalStorage boundary table. |
+| 5. Simulation Engine | SimulatorOutput interface. isBusinessDay() using FEDERAL_HOLIDAYS. Correlated settlement sampling (ratio-first, no rejection sampling). Deterministic 7-day history via mulberry32 seeded PRNG. Exception aging distribution with guaranteed bucket coverage. Per-rail SLA breach injection (additive, rail-specific thresholds). Non-business-day handling. Top-level generate() orchestration. |
+| 6. Cut-Off Time Logic | CUTOFF_SCHEDULE constant. secondsUntilCutOff() via Intl.DateTimeFormat (no manual UTC offsets). DST handling documented. ACH Same Day 3-window state machine. CutOffContext for StatusBar decoupling. Non-business-day display. |
+| 7. Performance Strategy | 300ms simulation budget via useState lazy initializer. 500ms render budget via useEffect-deferred API fetches. 50ms tick budget analysis + DevTools verification steps. React.memo list for timer isolation. Recharts animation disabled. Memory footprint estimate (~15–20MB, well within 50MB). |
+| 8. Error State Architecture | ErrorStateProps interface. MESSAGE_MAP (9 messages). Stale data display pattern. Loading skeleton dimensions for all 3 API sections. ApiErrorBoundary class component with per-source isolation. |
+
+### Key Design Decisions
+
+| Decision | Rationale |
+|----------|-----------|
+| Synchronous simulation in useState lazy initializer | Avoids loading states for simulated data; completes in 5–15ms; safe because it's pure in-memory computation |
+| Frankfurter cache in session memory (Map), not LocalStorage | FX rates are transient; clearing on reload is correct behavior; avoids stale rate risk |
+| Marketaux monthly counter key includes YYYY_MM | Automatic monthly reset with no explicit reset logic — new key = new counter |
+| CutOffContext created before CutOffTimeMonitor and StatusBar | Prevents circular dependency; both components consume the same context |
+| Seeded PRNG (mulberry32) for 7-day history | Math.random() is not seedable; deterministic history requires explicit seeding by date string |
+| FxConversionInline state scope resolved at ExceptionDrillDown level | fxLastFetch and retryFx live in ExceptionDrillDown, passed as props to FxConversionInline and ApiErrorBoundary |
+
+---
+
 ## Current Status
 
 | Artifact | Status |
 |----------|--------|
-| `requirements.md` | ✅ Complete — 18 requirements, 4 review rounds |
-| `design.md` | ⬜ Not started |
-| `tasks.md` | ⬜ Not started |
+| `requirements.md` | ✅ Complete — 18 requirements, 6 review rounds (QA, Engineer, Ops Manager, Architect, PM, Skeptic, UX, CRO, Sales Engineer) |
+| `design.md` | ✅ Complete — 8 sections, approved |
+| `tasks.md` | ⬜ Not started — pending generation |
 | Application code | ⬜ Not started |
 | `README.md` | ⬜ Not started |
 | GitHub repo | ✅ Live at github.com/ttague222/railwatch-payment-ops-monitor |
