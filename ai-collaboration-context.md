@@ -336,7 +336,7 @@ The design document was built section by section with explicit approval gates be
 | `requirements.md` | ✅ Complete — 18 requirements, 6 review rounds (QA, Engineer, Ops Manager, Architect, PM, Skeptic, UX, CRO, Sales Engineer) |
 | `design.md` | ✅ Complete — 8 sections, approved |
 | `tasks.md` | ✅ Complete — 35 tasks (33 + tasks 1a and 25a), 3 risk tasks flagged (5, 9, 17) |
-| Application code | 🔄 In progress — Tasks 1–24 complete (see task log below) |
+| Application code | 🔄 In progress — Tasks 1–28 complete (see task log below) |
 | `README.md` | ⬜ Not started |
 | GitHub repo | ✅ Live at github.com/ttague222/railwatch-payment-ops-monitor |
 
@@ -374,16 +374,21 @@ The design document was built section by section with explicit approval gates be
 | 23 | FredIndicator — FRED API fetch, 4h/24h cache, stale indicator, error handling | `src/api/fred.ts`, `src/components/FredIndicator.tsx` |
 | 24 | FxConversionInline — Frankfurter on-demand fetch, session cache, unsupported currency fallback | `src/api/frankfurter.ts`, `src/components/FxConversionInline.tsx` |
 
+### Completed Tasks (continued)
+
+| Task | Description | Key Files |
+|------|-------------|-----------|
+| 25a | [RISK] MarketauxContext — provider + consumer hooks | `src/context/MarketauxContext.tsx` |
+| 25 | MarketauxNewsFeed — fetch, monthly counter, sentiment labels, rail surfacing via context | `src/api/marketaux.ts`, `src/components/MarketauxNewsFeed.tsx` |
+| 26 | MarketContextPanel — composes FredIndicator + FxConversionInline + MarketauxNewsFeed with ApiErrorBoundary isolation | `src/components/MarketContextPanel.tsx` |
+| 27 | DailySummaryExport — plain-text clipboard export with modal fallback, 3s confirmation, deduplication | `src/components/DailySummaryExport.tsx` |
+| 28 | StatusBar — all four signals wired via CutOffContext, refresh button with loading indicator | `src/components/StatusBar.tsx`, `src/App.tsx` |
+
 ### Remaining Tasks
 
 | Task | Description |
 |------|-------------|
-| 25a | [RISK] MarketauxContext — already complete (done in task 14/15 batch) |
-| 25 | MarketauxNewsFeed — fetch, monthly counter, sentiment labels, rail surfacing |
-| 26 | MarketContextPanel — compose FredIndicator + FxConversionInline + MarketauxNewsFeed |
-| 27 | DailySummaryExport — plain-text clipboard export |
-| 28 | StatusBar completion — wire all four signals via CutOffContext |
-| 29 | Checkpoint — full component wiring in App.tsx |
+| 29 | Checkpoint — full component wiring in App.tsx, verify all context providers wrap correct subtrees |
 | 30 | Performance pass — React.memo audit + Recharts animation check |
 | 31 | Accessibility pass |
 | 32 | Edge case verification — all 18 Req 18 scenarios |
@@ -464,6 +469,21 @@ Bugs discovered and fixed during implementation, in chronological order.
 
 ---
 
+### Session 3 — Tasks 25–28 Implementation Notes (April 25, 2026)
+
+- `MarketauxContext` follows the same provider/consumer hook pattern as `CutOffContext` — `useMarketauxArticles()` for reading, `useSetMarketauxArticles()` for writing
+- `MarketauxNewsFeed` writes fetched articles to `MarketauxContext` so `RailHealthCard` can surface relevant headlines for Degraded/Critical rails without prop drilling
+- `MarketContextPanel` wraps each of the three API sub-components (`FredIndicator`, `FxConversionInline`, `MarketauxNewsFeed`) in an `ApiErrorBoundary` — failure in one section does not affect the others
+- `DailySummaryExport` reads from three sources: `useDataProvider()` for live sim data, `readFredCache()` / `readMarketauxCache()` from LocalStorage for API data, and `fxSessionCache` (module-level Map) for FX rates fetched this session
+- The export's FX section is omitted entirely (no error shown) when no FX rates have been fetched this session — correct per Req 13.4
+- `DailySummaryExport` uses a `timerRef` to track the 3-second confirmation timeout — a second click while the timer is running clears and resets it rather than duplicating the message (Req 18.18)
+- `StatusBar` is `React.memo`-wrapped and reads from `CutOffContext` (updated by `CutOffTimeMonitor`'s 1-second interval) — the timer tick does not cause `StatusBar` to re-render unless the cut-off summary actually changes
+- All four StatusBar signals use both color and text labels — no color-only indicators (Req 16.1)
+- The "All Systems Normal" state requires: 0 SLA breaches + coverage ratio ≥ 110% + all rails Healthy + no cut-off within 2 hours. In normal simulator output this state will not appear because `injectBreachExceptions()` guarantees at least one breach per rail (6 total). This is correct behavior — the indicator is reserved for genuinely clean operational states.
+- 35/35 tests passing after all task 25–28 changes
+
+---
+
 **Bug 7 — API Keys Hardcoded + CORS Policy Blocking Browser Requests (Session 2 — April 25, 2026)**
 
 - **Symptom:** FRED and Marketaux API integrations showed persistent error states: "Unable to reach the Federal Reserve data service" even after refreshing. Browser console showed CORS policy errors blocking requests to external APIs.
@@ -489,7 +509,14 @@ Bugs discovered and fixed during implementation, in chronological order.
 
 ---
 
-## Environment Variable Configuration
+**Bug 8 — Funding Coverage Ratio inconsistency between StatusBar, SettlementPositionTracker, and DailySummaryExport (discovered during task 28 verification)**
+
+- **Symptom:** The coverage ratio displayed in `StatusBar` could differ from the ratio shown in `SettlementPositionTracker` and included in the `DailySummaryExport` by a small rounding artifact, violating Req 13.8 (export ratio must match displayed ratio).
+- **Root cause:** The simulator engine computes `fundingCoverageRatio = Math.round(ratio * 10000) / 100` from the unrounded floating-point `ratio`, then separately rounds `settlementBalance` and `projectedDailyObligation` to integers. `SettlementPositionTracker` and `DailySummaryExport` both recompute the ratio from the rounded integers using `Math.round((balance / obligation) * 100 * 100) / 100`, which can produce a slightly different value than the engine's pre-computed field. `StatusBar` was reading the engine's pre-computed `fundingCoverageRatio` directly, so it could show a different value than the other two components.
+- **Fix:** Updated `StatusBar` to recompute the ratio from `settlementBalance` and `projectedDailyObligation` using the same formula as `SettlementPositionTracker` and `DailySummaryExport`. All three components now use identical logic: `Math.round((balance / obligation) * 10000) / 100`.
+- **Files changed:** `railwatch/src/components/StatusBar.tsx`
+
+---
 
 ### Setup (Completed — Session 2)
 
