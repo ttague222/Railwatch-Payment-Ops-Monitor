@@ -136,7 +136,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Apply `React.memo` to `RailHealthCard`
   - _Requirements: Req 5.1–5.11, Req 16.1, Req 16.5, Req 16.6_
 
-- [ ] 16. ExceptionQueueMonitor and ExceptionGroupRow components
+- [x] 16. ExceptionQueueMonitor and ExceptionGroupRow components
   - Create `src/components/ExceptionQueueMonitor.tsx`
   - Calls `useDataProvider().getExceptionQueue()` and `getPriorDayClosingExceptions()`
   - Manages `expandedGroups: Set<string>` state (key = `{rail}_{reasonCode}`)

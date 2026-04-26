@@ -334,16 +334,21 @@ function generateHistoricalVolumes(
 // ─── Section 5.7 — Non-Business-Day Handling ─────────────────────────────────
 
 function generateNonBusinessDayData(config: SimulatorSeedConfig): SimulatorOutput {
-  const railData: RailData[] = PAYMENT_RAILS.map(rail => ({
-    rail,
-    status: 'Healthy' as RailHealthStatus,
-    todayVolume: ['RTP', 'FedNow'].includes(rail) ? Math.floor(Math.random() * 50) : 0,
-    successCount: ['RTP', 'FedNow'].includes(rail) ? Math.floor(Math.random() * 50) : 0,
-    failureCount: 0,
-    failureRate: 0,
-    priorDayVolume: 0,
-    sevenDayAverage: 0,
-  }));
+  const railData: RailData[] = PAYMENT_RAILS.map(rail => {
+    // RTP and FedNow operate 24/7; all other rails have zero volume on non-business days
+    const todayVolume = ['RTP', 'FedNow'].includes(rail) ? Math.floor(Math.random() * 50) : 0;
+    return {
+      rail,
+      status: 'Healthy' as RailHealthStatus,
+      todayVolume,
+      // successCount must equal todayVolume when failureCount is 0 (Req 5.9 invariant)
+      successCount: todayVolume,
+      failureCount: 0,
+      failureRate: 0,
+      priorDayVolume: 0,
+      sevenDayAverage: 0,
+    };
+  });
 
   return {
     railData,

@@ -7,6 +7,7 @@ import { SimulatorDataProvider } from './providers/SimulatorDataProvider';
 import DemoModeBanner from './components/DemoModeBanner';
 import FirstRunOverlay from './components/FirstRunOverlay';
 import RailHealthOverview from './components/RailHealthOverview';
+import ExceptionQueueMonitor from './components/ExceptionQueueMonitor';
 
 function App() {
   const [provider, setProvider] = useState<DataProvider>(
@@ -30,7 +31,7 @@ function App() {
           <main className="p-4 space-y-6">
             <RailHealthOverview />
             {/* ExceptionQueueMonitor — task 16 */}
-            <section id="exception-queue-placeholder" />
+            <ExceptionQueueMonitor />
             {/* SettlementPositionTracker — task 19 */}
             <section id="settlement-position-placeholder" />
             {/* CutOffTimeMonitor — task 20 */}
