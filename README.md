@@ -54,7 +54,7 @@ All payment data is realistically simulated for a fictional $3B credit union (La
 | [Frankfurter](https://frankfurter.dev/) | On-demand FX rates for Wire International exceptions — shows USD → destination currency conversion inline in the exception drill-down. Fetched per currency pair on demand, cached for the session. | None required |
 | [Marketaux](https://www.marketaux.com/) | Payments industry news filtered by FedNow, RTP, ACH, and instant payments keywords, with sentiment scoring. Relevant headlines surface directly on Degraded/Critical rail cards. | Free API key |
 
-**CORS note:** FRED and Marketaux do not allow direct browser requests. In demo mode, requests are proxied through [corsproxy.io](https://corsproxy.io). In production, these calls would be made server-side with API keys stored securely in the backend.
+**CORS note:** FRED and Marketaux do not allow direct browser requests. In demo mode, requests are proxied through [corsproxy.io](https://corsproxy.io). In production, these calls would be made server-side with API keys stored securely in the backend. If corsproxy.io is unavailable, the Fed rate and news feed sections will show error states — this is a known demo-mode limitation and does not affect any of the payment operations data.
 
 ---
 
