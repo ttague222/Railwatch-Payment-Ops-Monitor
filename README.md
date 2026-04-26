@@ -97,7 +97,7 @@ Frankfurter requires no key.
 npm test
 ```
 
-65 tests across smoke tests, edge case verification (all 18 Req 18 scenarios), and Marketaux integration verification.
+84 tests across smoke tests, edge case verification (all 18 Req 18 scenarios), and Marketaux integration verification.
 
 ---
 

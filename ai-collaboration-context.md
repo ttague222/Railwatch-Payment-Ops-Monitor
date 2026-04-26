@@ -294,6 +294,24 @@ A Sales Engineer persona reviewed the requirements with a focus on whether a Nym
 
 ---
 
+## Session 2 — API Setup and CORS Resolution (April 25, 2026)
+
+See: Infrastructure Setup, CORS Proxy Implementation, and Bug 7 in the Bug Log below.
+
+---
+
+## Session 3 — Implementation (Tasks 1–28)
+
+See: Implementation Task Log below.
+
+---
+
+## Session 4 — Tasks 29–33 and Final Verification (April 26, 2026)
+
+See: Session 4 entry in the Implementation Task Log below.
+
+---
+
 ## Session 5 — Nymbus UX Alignment (Post-Implementation)
 
 ### Context
