@@ -268,6 +268,51 @@ Added **Requirement 18: Edge Cases and Boundary Conditions** covering:
 
 ---
 
+## Session 5 — Nymbus UX Alignment (Post-Implementation)
+
+### Context
+
+After all 35 implementation tasks were complete and committed, a visual design pass was performed to align RailWatch's UI with Nymbus's brand colors and UX patterns. The goal: make the dashboard feel like a native Nymbus product rather than a generic Tailwind app.
+
+### Research
+
+Nymbus's public-facing site (nymbus.com), product screenshots, and Dribbble portfolio were reviewed to extract their design language:
+- Deep navy/near-black backgrounds (`#0A0F1E`) for chrome elements
+- Teal/cyan accent color (`#00C2B2`) for CTAs, active states, and brand anchors
+- Clean white card surfaces on a light mist background (`#F0F4F8`)
+- Uppercase tracking-widest labels for section headers
+- Pill-style status badges with ring outlines instead of solid fills
+- Left-border or top-bar accent strips for status-coded cards (avoids Tailwind border color conflicts)
+- Subdued informational banners instead of loud alert colors
+
+### Key Technical Issue Encountered
+
+The project uses **Tailwind v4** (`tailwindcss@^4.2.4`), which does not read custom color tokens from `tailwind.config.ts`. In v4, custom tokens must be declared as CSS variables inside an `@theme {}` block in the CSS entry file. The initial implementation added colors to `tailwind.config.ts` (v3 pattern), which caused all `nymbus-*` utility classes to silently produce no output. Fixed by moving all token definitions to `src/index.css` under `@theme`.
+
+A secondary issue: Tailwind v4 requires kebab-case CSS variable names. `nymbus-tealDim` was renamed to `nymbus-teal-dim` and all references updated.
+
+A third issue: combining `border border-gray-200` with `border-l-4 border-emerald-500` on the same element causes Tailwind to apply only one border color (the last one wins). Fixed by switching all status-coded cards and rows to use a **top accent bar** (`<div className="h-1 w-full bg-emerald-500" />`) as a separate child element inside an `overflow-hidden` wrapper — this avoids the border color conflict entirely.
+
+### Changes Made
+
+| File | Change |
+|------|--------|
+| `src/index.css` | Added `@theme` block with 6 Nymbus color tokens |
+| `tailwind.config.ts` | Removed redundant v3-style color extensions |
+| `src/App.tsx` | Added branded product header strip; `bg-nymbus-mist` page background |
+| `src/components/DemoModeBanner.tsx` | Replaced loud yellow banner with subtle dark navy strip + teal text |
+| `src/components/StatusBar.tsx` | Navy background, teal left-border accent, teal Refresh button |
+| `src/components/RailHealthOverview.tsx` | Teal uppercase tracking section header |
+| `src/components/RailHealthCard.tsx` | Top accent bar for status color; `rounded-xl shadow-md`; pill badges; `tabular-nums` on financials |
+| `src/components/ExceptionQueueMonitor.tsx` | Teal section header; left-border alert banners; `rounded-xl shadow-md` cards |
+| `src/components/ExceptionGroupRow.tsx` | Top accent bar for SLA status color; pill badges; `hover:bg-nymbus-mist` |
+| `src/components/SettlementPositionTracker.tsx` | Teal section header; `rounded-xl shadow-md`; `bg-nymbus-mist` metric tiles; left-border alerts; per-rail accent bars |
+| `src/components/CutOffTimeMonitor.tsx` | Teal section header; `rounded-xl shadow-md`; updated countdown badge colors |
+| `src/components/MarketContextPanel.tsx` | Teal section header and sub-labels; teal currency pills |
+| `src/components/DailySummaryExport.tsx` | Teal section header; teal Copy Summary button |
+
+---
+
 ## Phase 2 — What Would Be Built Next
 
 If RailWatch were a real product moving toward production, the following capabilities would be prioritized in order:
@@ -335,8 +380,9 @@ The design document was built section by section with explicit approval gates be
 |----------|--------|
 | `requirements.md` | ✅ Complete — 18 requirements, 6 review rounds (QA, Engineer, Ops Manager, Architect, PM, Skeptic, UX, CRO, Sales Engineer) |
 | `design.md` | ✅ Complete — 8 sections, approved |
-| `tasks.md` | ✅ Complete — 35 tasks (33 + tasks 1a and 25a), 3 risk tasks flagged (5, 9, 17) |
-| Application code | 🔄 In progress — Tasks 1–32 complete (task 33 remaining) |
+| `tasks.md` | ✅ Complete — all 35 tasks complete (33 + tasks 1a and 25a) |
+| Application code | ✅ Complete — all tasks 1–33 implemented and verified |
+| Nymbus UX alignment | ✅ Complete — full visual redesign applied post-implementation (see Session 5 below) |
 | `README.md` | ⬜ Not started |
 | GitHub repo | ✅ Live at github.com/ttague222/railwatch-payment-ops-monitor |
 
@@ -395,9 +441,7 @@ The design document was built section by section with explicit approval gates be
 
 ### Remaining Tasks
 
-| Task | Description |
-|------|-------------|
-| 33 | Final checkpoint — full test suite + integration review |
+None — all 35 tasks complete.
 
 ### Bug Log
 
