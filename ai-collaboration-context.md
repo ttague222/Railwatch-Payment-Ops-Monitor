@@ -464,6 +464,101 @@ Bugs discovered and fixed during implementation, in chronological order.
 
 ---
 
+**Bug 7 — API Keys Hardcoded + CORS Policy Blocking Browser Requests (Session 2 — April 25, 2026)**
+
+- **Symptom:** FRED and Marketaux API integrations showed persistent error states: "Unable to reach the Federal Reserve data service" even after refreshing. Browser console showed CORS policy errors blocking requests to external APIs.
+- **Root cause:** Two issues:
+  1. API keys were hardcoded in `fred.ts` and `marketaux.ts` instead of reading from environment variables
+  2. FRED and Marketaux APIs do not send CORS headers allowing direct browser requests — they expect server-side calls
+- **Fix:**
+  1. Created `.env.example` template and `.env.local` for local environment variables
+  2. Updated API files to read from `import.meta.env.VITE_FRED_API_KEY` and `VITE_MARKETAUX_API_TOKEN`
+  3. Added `.gitignore` pattern `*.local` to exclude `.env.local` from version control
+  4. Implemented CORS proxy (corsproxy.io) with `USE_CORS_PROXY` flag and extensive production implementation notes
+- **Production notes added:** Inline comments in both `fred.ts` and `marketaux.ts` explain:
+  - CORS proxy is DEMO MODE ONLY
+  - Production implementation would use backend server proxy
+  - Backend would handle caching, rate limiting, and secure API key storage
+  - `USE_CORS_PROXY` flag can be toggled to `false` when backend is available
+- **Files changed:**
+  - `railwatch/.env.example` (created)
+  - `railwatch/.env.local` (created, git-ignored)
+  - `railwatch/src/api/fred.ts` (env vars + CORS proxy)
+  - `railwatch/src/api/marketaux.ts` (env vars + CORS proxy)
+- **Result:** Both FRED and Marketaux API integrations now working in browser with real API keys
+
+---
+
+## Environment Variable Configuration
+
+### Setup (Completed — Session 2)
+
+**Files:**
+- `.env.example` — Template with instructions for obtaining API keys (committed to git)
+- `.env.local` — Local environment file with actual keys (git-ignored via `*.local` pattern)
+
+**Environment Variables:**
+```bash
+VITE_FRED_API_KEY=<your_fred_api_key>
+VITE_MARKETAUX_API_TOKEN=<your_marketaux_token>
+```
+
+**API Key Sources:**
+- FRED: https://fred.stlouisfed.org/docs/api/api_key.html (free, instant approval, 120 req/day)
+- Marketaux: https://app.marketaux.com/register (free tier 100 req/month)
+- Frankfurter: No key required (fully open API)
+
+**Usage:**
+- Vite automatically loads `.env.local` at startup
+- Variables prefixed with `VITE_` are exposed to client code via `import.meta.env`
+- Dev server must be restarted after changing `.env.local` for changes to take effect
+
+---
+
+## CORS Proxy Implementation (Demo Mode)
+
+### Context
+
+FRED and Marketaux APIs do not allow direct browser requests due to CORS (Cross-Origin Resource Sharing) policy. In production, these APIs would be called from a backend server. For demo purposes, we use a CORS proxy.
+
+### Implementation
+
+**CORS Proxy:** https://corsproxy.io (free, no registration required)
+
+**Pattern used in both `fred.ts` and `marketaux.ts`:**
+
+```typescript
+const USE_CORS_PROXY = true; // Toggle for backend integration
+
+const BASE_ENDPOINT = 'https://api.example.com/endpoint?params...';
+
+const FINAL_ENDPOINT = USE_CORS_PROXY
+  ? `https://corsproxy.io/?${encodeURIComponent(BASE_ENDPOINT)}`
+  : BASE_ENDPOINT;
+```
+
+### Production Implementation Notes (Documented in Code)
+
+Both API files contain extensive inline comments explaining the production architecture:
+
+**Backend Server Approach:**
+1. React frontend sends request to backend API route
+2. Backend makes API call server-side (no CORS restrictions)
+3. Backend caches response in database (Redis/PostgreSQL) with TTL
+4. Backend returns formatted data to frontend
+
+**Benefits:**
+- No CORS issues
+- API keys remain server-side (better security)
+- Persistent caching across user sessions
+- Better rate limit management
+- Request counter persists in database (not just LocalStorage)
+
+**Migration Path:**
+Set `USE_CORS_PROXY = false` and point `BASE_ENDPOINT` to backend proxy route (e.g., `/api/fred`, `/api/marketaux`)
+
+---
+
 ## Open Questions for Design Phase
 
 These are known open questions being deliberately deferred to design.md. Capturing them here ensures they are not lost.

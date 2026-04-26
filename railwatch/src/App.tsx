@@ -10,7 +10,7 @@ import RailHealthOverview from './components/RailHealthOverview';
 import ExceptionQueueMonitor from './components/ExceptionQueueMonitor';
 import SettlementPositionTracker from './components/SettlementPositionTracker';
 import CutOffTimeMonitor from './components/CutOffTimeMonitor';
-import FredIndicator from './components/FredIndicator';
+import MarketContextPanel from './components/MarketContextPanel';
 
 function App() {
   const [provider, setProvider] = useState<DataProvider>(
@@ -44,12 +44,8 @@ function App() {
             <ExceptionQueueMonitor />
             <SettlementPositionTracker />
             <CutOffTimeMonitor />
-            {/* Market Context — FredIndicator inline until MarketContextPanel (task 26) */}
             <section className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">Market Context</h2>
-              <FredIndicator />
-              {/* FxConversionInline renders inside ExceptionDrillDown for Wire_International */}
-              {/* MarketauxNewsFeed — task 25 */}
+              <MarketContextPanel />
             </section>
             {/* DailySummaryExport — task 27 */}
             <section id="daily-summary-placeholder" />

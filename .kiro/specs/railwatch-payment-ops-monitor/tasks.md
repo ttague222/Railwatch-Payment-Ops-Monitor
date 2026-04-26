@@ -244,7 +244,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Wire `useMarketauxArticles()` into `RailHealthCard` (task 15) to complete conditional headline surfacing
   - _Requirements: Req 10.1–10.13, Req 18.8_
 
-- [ ] 26. MarketContextPanel — compose all three API sections with error boundaries
+- [x] 26. MarketContextPanel — compose all three API sections with error boundaries
   - Create `src/components/MarketContextPanel.tsx`
   - Composes `FredIndicator`, `FxConversionInline` (for Wire_International exceptions from exception queue), and `MarketauxNewsFeed`
   - Each sub-component wrapped in `ApiErrorBoundary`
