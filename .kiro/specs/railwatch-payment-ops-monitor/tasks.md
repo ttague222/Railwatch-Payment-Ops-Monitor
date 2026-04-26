@@ -119,14 +119,14 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - If LocalStorage is unavailable (try/catch), skip overlay entirely
   - _Requirements: Req 3.1–3.5_
 
-- [ ] 14. UserPreferences read/write utilities
+- [x] 14. UserPreferences read/write utilities
   - Create `src/utils/preferences.ts`
   - Define `UserPreferences` interface: `{ panelCollapseState: Record<string, boolean>; refreshInterval: number }`
   - Implement `readPreferences(): UserPreferences` — reads `railwatch_user_prefs` from LocalStorage; returns defaults if absent or parse fails
   - Implement `writePreferences(prefs: UserPreferences): void` — writes to LocalStorage; silently catches storage-full errors
   - _Requirements: Req 1.6, Req 14.8_
 
-- [ ] 15. RailHealthOverview and RailHealthCard components
+- [x] 15. RailHealthOverview and RailHealthCard components
   - Create `src/components/RailHealthOverview.tsx` — calls `useDataProvider().getRailData()`, renders six `RailHealthCard` instances
   - Create `src/components/RailHealthCard.tsx`
   - Display: rail name, status badge (color + text label), today volume, success/failure rates as percentages (2dp), prior-day volume comparison, 7-day average comparison
