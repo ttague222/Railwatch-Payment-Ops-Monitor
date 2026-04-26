@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd railwatch && npm install && npm run build",
+  "outputDirectory": "railwatch/dist",
+  "framework": "vite",
+  "installCommand": "echo 'install handled in buildCommand'"
+}

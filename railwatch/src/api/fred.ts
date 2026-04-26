@@ -9,37 +9,22 @@ const FRED_FETCH_TIMEOUT_MS = 5000;
 
 const FRED_API_KEY = import.meta.env.VITE_FRED_API_KEY || 'DEMO_KEY';
 
-// ─── CORS Proxy Configuration (DEMO MODE ONLY) ───────────────────────────────
+// ─── Endpoint configuration ───────────────────────────────────────────────────
 //
-// NOTE: This CORS proxy is used ONLY for browser-based demo purposes.
+// In dev mode, Vite proxies /api/fred → https://api.stlouisfed.org/fred
+// so no third-party CORS proxy is needed (see vite.config.ts server.proxy).
 //
-// PRODUCTION IMPLEMENTATION:
-// In production, API calls to FRED would be made from a backend server (not the browser).
-// The backend would:
-//   1. Receive requests from the React frontend
-//   2. Make the FRED API call server-side (no CORS restrictions)
-//   3. Cache responses in a database (Redis/PostgreSQL) with TTL
-//   4. Return formatted data to the frontend
-//
-// This eliminates CORS issues and provides better security (API keys stay server-side),
-// caching, and rate limit management.
-//
-// For demo purposes, we use corsproxy.io to bypass browser CORS restrictions.
+// In production, replace this with a call to your own backend route (e.g. /api/fred)
+// so the API key stays server-side and caching is persistent across sessions.
 // ──────────────────────────────────────────────────────────────────────────────
 
-const USE_CORS_PROXY = true; // Set to false when running through a backend proxy
-
-const FRED_BASE_ENDPOINT =
-  'https://api.stlouisfed.org/fred/series/observations' +
+const FRED_ENDPOINT =
+  '/api/fred/series/observations' +
   '?series_id=FEDFUNDS' +
   `&api_key=${FRED_API_KEY}` +
   '&limit=2' +
   '&sort_order=desc' +
   '&file_type=json';
-
-const FRED_ENDPOINT = USE_CORS_PROXY
-  ? `https://corsproxy.io/?${encodeURIComponent(FRED_BASE_ENDPOINT)}`
-  : FRED_BASE_ENDPOINT;
 
 // ─── Raw API shape ────────────────────────────────────────────────────────────
 
