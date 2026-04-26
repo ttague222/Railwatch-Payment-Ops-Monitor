@@ -18,9 +18,9 @@ interface Props {
 }
 
 function fmtYAxis(value: number): string {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
-  if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
-  return `$${value}`;
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
+  return `${value}`;
 }
 
 function fmtHour(hour: number): string {
@@ -49,11 +49,13 @@ const SettlementTimeline = React.memo(function SettlementTimeline({ data }: Prop
             width={56}
           />
           <Tooltip
-            formatter={(value: number, name: string) => [
-              `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+            formatter={(value, name) => [
+              typeof value === 'number'
+                ? value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                : String(value),
               name === 'projectedObligation' ? 'Projected Obligation' : 'Settled to Date',
             ]}
-            labelFormatter={(label: number) => `Hour: ${fmtHour(label)}`}
+            labelFormatter={(label) => `Hour: ${fmtHour(Number(label))}`}
           />
           <Legend
             formatter={(value: string) =>
