@@ -6,7 +6,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
 
 ## Tasks
 
-- [-] 1. Project scaffolding — Vite + React + TypeScript, folder structure, Tailwind, Recharts
+- [x] 1. Project scaffolding — Vite + React + TypeScript, folder structure, Tailwind, Recharts
   - Scaffold with `npm create vite@latest railwatch -- --template react-ts`
   - Install dependencies: `recharts`, `tailwindcss`, `postcss`, `autoprefixer`
   - Create folder structure: `src/types/`, `src/simulator/`, `src/providers/`, `src/context/`, `src/components/`, `src/api/`, `src/utils/`
@@ -14,7 +14,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Verify dev server starts and renders default Vite page
   - _Requirements: Req 1, Req 14_
 
-- [ ] 1a. Configure Vitest as the test runner
+- [x] 1a. Configure Vitest as the test runner
   - Install `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `@vitest/ui`, `jsdom`
   - Add `test` config block to `vite.config.ts`: `environment: 'jsdom'`, `globals: true`, `setupFiles: ['./src/test/setup.ts']`
   - Create `src/test/setup.ts` importing `@testing-library/jest-dom`
@@ -23,7 +23,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - This task must be complete before tasks 29 and 33 reference "all tests pass"
   - _Requirements: Req 1, Req 14_
 
-- [ ] 2. Core TypeScript type definitions
+- [x] 2. Core TypeScript type definitions
   - Create `src/types/index.ts` with all type aliases and interfaces from design.md Section 2
   - Include: `PaymentRail`, `RailHealthStatus`, `ReasonCodeNamespace`, `TransactionStatus`, `AlertSeverity`
   - Include: `Transaction`, `ExceptionGroup`, `RailData`, `SettlementPosition`, `IntradayTimelineEntry`, `CutOffTime`, `CutOffWindow`, `HistoricalVolumeEntry`
@@ -32,7 +32,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Include: `DataProvider` interface with all five method signatures
   - _Requirements: Req 1.12, Req 5, Req 6, Req 7, Req 9, Req 15_
 
-- [ ] 3. FEDERAL_HOLIDAYS constant and isBusinessDay() utility
+- [x] 3. FEDERAL_HOLIDAYS constant and isBusinessDay() utility
   - Create `src/simulator/holidays.ts` exporting `FEDERAL_HOLIDAYS: string[]` with 2025–2026 dates from design.md Section 2
   - Implement `isBusinessDay(date: Date): boolean` — returns false for Saturday, Sunday, and dates in `FEDERAL_HOLIDAYS`
   - _Requirements: Req 1.4, Req 15.12, Req 15.13, Req 17.7_
