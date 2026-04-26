@@ -165,7 +165,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Displays "Demo Data" label on each transaction record
   - _Requirements: Req 4.1–4.7, Req 6.21, Req 16.5_
 
-- [ ] 19. SettlementPositionTracker and SettlementTimeline components
+- [x] 19. SettlementPositionTracker and SettlementTimeline components
   - Create `src/components/SettlementPositionTracker.tsx`
   - Calls `useDataProvider().getSettlementPosition()`
   - Displays `settlementBalance` and `projectedDailyObligation` in USD format ($X,XXX,XXX.XX)
@@ -177,7 +177,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Apply `React.memo` to `SettlementTimeline`
   - _Requirements: Req 7.1–7.12, Req 16.3, Req 16.5, Req 18.15, Req 18.16_
 
-- [ ] 20. CutOffTimeMonitor and AchSameDayWindowStrip components
+- [x] 20. CutOffTimeMonitor and AchSameDayWindowStrip components
   - Create `src/components/CutOffTimeMonitor.tsx`
   - Owns single `setInterval` at 1000ms; maintains `now: Date` state updated each tick
   - On each tick: computes `secondsRemaining` per window using `secondsUntilCutOff()` from task 10; writes `CutOffSummary` to `CutOffContext` via `useSetCutOffSummary()`

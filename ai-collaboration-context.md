@@ -336,9 +336,108 @@ The design document was built section by section with explicit approval gates be
 | `requirements.md` | ✅ Complete — 18 requirements, 6 review rounds (QA, Engineer, Ops Manager, Architect, PM, Skeptic, UX, CRO, Sales Engineer) |
 | `design.md` | ✅ Complete — 8 sections, approved |
 | `tasks.md` | ✅ Complete — 35 tasks (33 + tasks 1a and 25a), 3 risk tasks flagged (5, 9, 17) |
-| Application code | 🔄 In progress — Task 1 starting now |
+| Application code | 🔄 In progress — Task 19 complete (see task log below) |
 | `README.md` | ⬜ Not started |
 | GitHub repo | ✅ Live at github.com/ttague222/railwatch-payment-ops-monitor |
+
+---
+
+## Implementation Task Log
+
+### Completed Tasks
+
+| Task | Description | Key Files |
+|------|-------------|-----------|
+| 1 | Project scaffolding — Vite + React + TypeScript, Tailwind, Recharts | `railwatch/` root, `vite.config.ts`, `tailwind.config.ts`, `postcss.config.js`, `index.css` |
+| 1a | Vitest test runner configured | `vite.config.ts` (test block), `src/test/setup.ts`, `src/test/smoke.test.ts` |
+| 2 | Core TypeScript type definitions | `src/types/index.ts` |
+| 3 | FEDERAL_HOLIDAYS + isBusinessDay() | `src/simulator/holidays.ts` |
+| 4 | SimulatorSeedConfig + DEFAULT_SEED_CONFIG | `src/simulator/config.ts` |
+| 5 | [RISK] Seeded PRNG — mulberry32 | `src/simulator/prng.ts` |
+| 6 | Simulation engine — generate() | `src/simulator/engine.ts` |
+| 7 | SimulatorDataProvider | `src/providers/SimulatorDataProvider.ts` |
+| 8 | DataProviderContext + useDataProvider hook | `src/context/DataProviderContext.tsx` |
+| 9 | [RISK] CutOffContext — provider + consumer hooks | `src/context/CutOffContext.tsx` |
+| 10 | CUTOFF_SCHEDULE + secondsUntilCutOff() + getNextBusinessDay() | `src/utils/cutoff.ts` |
+| 11 | App shell — DemoModeBanner, layout, refresh logic | `src/App.tsx`, `src/components/DemoModeBanner.tsx` |
+| 12 | Schema versioning — migrateIfNeeded() | `src/utils/schema.ts`, `src/main.tsx` |
+| 13 | FirstRunOverlay component | `src/components/FirstRunOverlay.tsx` |
+| 14 | UserPreferences read/write utilities | `src/utils/preferences.ts` |
+| 15 | RailHealthOverview + RailHealthCard | `src/components/RailHealthOverview.tsx`, `src/components/RailHealthCard.tsx` |
+| 16 | ExceptionQueueMonitor + ExceptionGroupRow | `src/components/ExceptionQueueMonitor.tsx`, `src/components/ExceptionGroupRow.tsx` |
+| 17 | [RISK] FxConversionInline state scope resolved | `src/components/ExceptionDrillDown.tsx` (scaffolded) |
+| 18 | ExceptionDrillDown component | `src/components/ExceptionDrillDown.tsx` |
+| 19 | SettlementPositionTracker + SettlementTimeline | `src/components/SettlementPositionTracker.tsx`, `src/components/SettlementTimeline.tsx` |
+
+### Remaining Tasks
+
+| Task | Description |
+|------|-------------|
+| 20 | CutOffTimeMonitor + AchSameDayWindowStrip |
+| 21 | ErrorState + ApiErrorBoundary |
+| 22 | Loading skeleton components (Fred, Fx, News) |
+| 23 | FredIndicator — FRED API fetch, cache, error handling |
+| 24 | FxConversionInline — Frankfurter on-demand fetch |
+| 25a | [RISK] MarketauxContext |
+| 25 | MarketauxNewsFeed — fetch, monthly counter, rail surfacing |
+| 26 | MarketContextPanel — compose all three API sections |
+| 27 | DailySummaryExport |
+| 28 | StatusBar completion — wire all four signals |
+| 29 | Checkpoint — wire all components into App |
+| 30 | Performance pass — React.memo + Recharts animation |
+| 31 | Accessibility pass |
+| 32 | Edge case verification — all 18 Req 18 scenarios |
+| 33 | Final checkpoint — full test suite + integration review |
+
+### Bug Log
+
+Bugs discovered and fixed during implementation, in chronological order.
+
+---
+
+**Bug 1 — Tailwind PostCSS plugin name wrong (commit `494d409`)**
+
+- **Symptom:** Tailwind styles not applying; PostCSS threw a plugin resolution error on dev server start.
+- **Root cause:** Vite's `npm create` scaffold generated `postcss.config.js` with `tailwindcss: {}` as the plugin key. Tailwind v4 changed the PostCSS plugin to a separate package (`@tailwindcss/postcss`) with a different key.
+- **Fix:** Changed `postcss.config.js` plugin key from `tailwindcss: {}` to `'@tailwindcss/postcss': {}`.
+- **Files changed:** `railwatch/postcss.config.js`
+
+---
+
+**Bug 2 — TypeScript JSX transform missing + `@types/react` not installed (commit `494d409`)**
+
+- **Symptom:** TypeScript compiler errors on all `.tsx` files — JSX not recognized, React types missing.
+- **Root cause:** The scaffold's `tsconfig.json` was missing `"jsx": "react-jsx"` and `@types/react` was not in `devDependencies`. Also, `noUnusedLocals` and `noUnusedParameters` were `true`, causing spurious errors during incremental development.
+- **Fix:** Added `"jsx": "react-jsx"` to `tsconfig.json` compiler options. Installed `@types/react`. Set `noUnusedLocals` and `noUnusedParameters` to `false` to avoid noise during active development.
+- **Files changed:** `railwatch/tsconfig.json`, `railwatch/package.json`
+
+---
+
+**Bug 3 — Tailwind v4 CSS import syntax wrong (commit `412393c`)**
+
+- **Symptom:** Tailwind utility classes not generating; no styles in output.
+- **Root cause:** Tailwind v4 replaced the three-directive pattern (`@tailwind base; @tailwind components; @tailwind utilities`) with a single `@import "tailwindcss"` statement. The scaffold generated the old v3 syntax.
+- **Fix:** Replaced the three `@tailwind` directives in `index.css` with `@import "tailwindcss"`.
+- **Files changed:** `railwatch/src/index.css`
+
+---
+
+**Bug 4 — Req 5.9 invariant violated in non-business-day simulator output (commit `2f09233`)**
+
+- **Symptom:** `successCount + failureCount !== todayVolume` for rails on non-business days, breaking the completeness invariant.
+- **Root cause:** In `generateNonBusinessDayData()`, `todayVolume` and `successCount` were each independently sampled via separate `Math.random()` calls. Since they were drawn independently, they could diverge — e.g. `todayVolume = 120`, `successCount = 95`, `failureCount = 0` → sum is 95, not 120.
+- **Fix:** Derived `successCount = todayVolume - failureCount` instead of sampling it independently. On non-business days `failureCount` is 0, so `successCount = todayVolume` exactly.
+- **Files changed:** `railwatch/src/simulator/engine.ts`
+
+---
+
+### Implementation Notes
+
+- All three flagged risk tasks (5, 9, 17) are complete — downstream dependencies are unblocked
+- `SettlementPositionTracker` uses `React.memo` and correctly handles the 100.00% = CRITICAL / 110.00% = Adequate boundary conditions (Req 18.15, 18.16)
+- `SettlementTimeline` uses Recharts `ComposedChart` (Bar + Area) with `isAnimationActive={false}` on all series and a `ReferenceLine` at the current hour
+- No component below `App` imports from `src/simulator/` — DataProvider boundary is intact
+- All monetary values use `$X,XXX,XXX.XX` format; all percentages use `XX.XX%` format throughout
 
 ---
 
