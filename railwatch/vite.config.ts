@@ -13,6 +13,12 @@ export default defineConfig({
   // PRODUCTION: These routes should be handled by a real backend (Next.js API routes,
   // Express, etc.) so API keys never reach the browser and caching is persistent.
   // ──────────────────────────────────────────────────────────────────────────────
+  build: {
+    // Recharts + React bundle is ~630KB minified — expected for a single-page app.
+    // Raise the warning threshold to keep CI output clean.
+    chunkSizeWarningLimit: 700,
+  },
+
   server: {
     proxy: {
       '/api/fred': {
