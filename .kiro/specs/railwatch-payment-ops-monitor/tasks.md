@@ -60,7 +60,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Implement top-level `generate(config: SimulatorSeedConfig): SimulatorOutput` per design.md Section 5.8
   - _Requirements: Req 1.3, Req 1.4, Req 1.7, Req 15.1–15.13_
 
-- [ ] 7. SimulatorDataProvider implementing DataProvider interface
+- [x] 7. SimulatorDataProvider implementing DataProvider interface
   - Create `src/providers/SimulatorDataProvider.ts`
   - Implement `SimulatorDataProvider` class with `DataProvider` interface
   - Constructor calls `generate(seedConfig)` and stores result as `private data: SimulatorOutput`
@@ -69,14 +69,14 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - No component other than `SimulatorDataProvider` may import from `src/simulator/`
   - _Requirements: Req 1.12_
 
-- [ ] 8. DataProviderContext and useDataProvider hook
+- [x] 8. DataProviderContext and useDataProvider hook
   - Create `src/context/DataProviderContext.tsx`
   - Create `DataProviderContext` with `createContext<DataProvider | null>(null)`
   - Implement `useDataProvider(): DataProvider` hook — throws if used outside provider
   - Export context and hook
   - _Requirements: Req 1.12_
 
-- [ ] 9. [RISK] CutOffContext with provider and consumer pattern — required before CutOffTimeMonitor and StatusBar
+- [x] 9. [RISK] CutOffContext with provider and consumer pattern — required before CutOffTimeMonitor and StatusBar
   - Create `src/context/CutOffContext.tsx`
   - Define `CutOffSummary` interface: `{ nextRail: PaymentRail | null; nextWindowLabel: string | null; secondsRemaining: number | null }`
   - Create `CutOffContext` with `createContext<{ summary: CutOffSummary; setSummary: (s: CutOffSummary) => void } | null>(null)`
@@ -86,7 +86,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - This context must exist before task 20 (CutOffTimeMonitor) and task 28 (StatusBar wiring)
   - _Requirements: Req 2.2, Req 2.5, Req 17_
 
-- [ ] 10. CUTOFF_SCHEDULE constant and secondsUntilCutOff() utility
+- [x] 10. CUTOFF_SCHEDULE constant and secondsUntilCutOff() utility
   - Create `src/utils/cutoff.ts`
   - Export `CUTOFF_SCHEDULE: Record<PaymentRail, CutOffWindow[]>` with all rail cut-off times from design.md Section 6.1 (ACH_Standard 14:45, ACH_Same_Day three windows, Wire_Domestic 18:00, Wire_International 17:00, RTP/FedNow no cut-off)
   - Implement `secondsUntilCutOff(windowTimeET: string, now: Date): number | null` using `Intl.DateTimeFormat` for Eastern Time — no manual UTC offset arithmetic
