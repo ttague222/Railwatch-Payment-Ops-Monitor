@@ -253,7 +253,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Defers all API fetches until after initial simulated data render (use `useEffect` with no blocking)
   - _Requirements: Req 12.1–12.6, Req 18.5, Req 18.6, Req 18.7_
 
-- [ ] 27. DailySummaryExport component
+- [x] 27. DailySummaryExport component
   - Create `src/components/DailySummaryExport.tsx`
   - Props: `generatedAt: Date`
   - Assembles plain-text summary from `useDataProvider()` and cached API state (reads LocalStorage for FRED and Marketaux caches; reads `fxSessionCache` for FX rates)
@@ -265,7 +265,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - State: `copyState: 'idle' | 'copied' | 'fallback'`
   - _Requirements: Req 13.1–13.8, Req 18.17, Req 18.18_
 
-- [ ] 28. StatusBar completion — wire all four signals via CutOffContext
+- [x] 28. StatusBar completion — wire all four signals via CutOffContext
   - Complete `src/components/StatusBar.tsx`
   - Props: `generatedAt: Date`, `onRefresh: () => void`
   - Signal 1: total SLA breach count from `useDataProvider().getExceptionQueue()` — breach-level color + count label
