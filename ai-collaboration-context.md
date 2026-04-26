@@ -336,7 +336,7 @@ The design document was built section by section with explicit approval gates be
 | `requirements.md` | ✅ Complete — 18 requirements, 6 review rounds (QA, Engineer, Ops Manager, Architect, PM, Skeptic, UX, CRO, Sales Engineer) |
 | `design.md` | ✅ Complete — 8 sections, approved |
 | `tasks.md` | ✅ Complete — 35 tasks (33 + tasks 1a and 25a), 3 risk tasks flagged (5, 9, 17) |
-| Application code | 🔄 In progress — Tasks 1–28 complete (see task log below) |
+| Application code | 🔄 In progress — Tasks 1–32 complete (task 33 remaining) |
 | `README.md` | ⬜ Not started |
 | GitHub repo | ✅ Live at github.com/ttague222/railwatch-payment-ops-monitor |
 
@@ -384,14 +384,19 @@ The design document was built section by section with explicit approval gates be
 | 27 | DailySummaryExport — plain-text clipboard export with modal fallback, 3s confirmation, deduplication | `src/components/DailySummaryExport.tsx` |
 | 28 | StatusBar — all four signals wired via CutOffContext, refresh button with loading indicator | `src/components/StatusBar.tsx`, `src/App.tsx` |
 
+### Completed Tasks (continued)
+
+| Task | Description | Key Files |
+|------|-------------|-----------|
+| 29 | Checkpoint — full component wiring in App.tsx, all context providers verified | `src/App.tsx` |
+| 30 | Performance pass — React.memo audit, Recharts `isAnimationActive={false}` confirmed | All component files |
+| 31 | Accessibility pass — keyboard nav, color+label indicators, monetary/percentage formatting | All component files |
+| 32 | Edge case verification — all 18 Req 18 scenarios | `src/test/edge-cases.test.ts` |
+
 ### Remaining Tasks
 
 | Task | Description |
 |------|-------------|
-| 29 | Checkpoint — full component wiring in App.tsx, verify all context providers wrap correct subtrees |
-| 30 | Performance pass — React.memo audit + Recharts animation check |
-| 31 | Accessibility pass |
-| 32 | Edge case verification — all 18 Req 18 scenarios |
 | 33 | Final checkpoint — full test suite + integration review |
 
 ### Bug Log
@@ -469,7 +474,26 @@ Bugs discovered and fixed during implementation, in chronological order.
 
 ---
 
-### Session 3 — Tasks 25–28 Implementation Notes (April 25, 2026)
+### Session 4 — Tasks 29–32 (April 26, 2026)
+
+- Tasks 29–31 (wiring checkpoint, performance pass, accessibility pass) were completed in a prior session
+- Task 32 (edge case verification — all 18 Req 18 scenarios) required fixing a pre-existing `edge-cases.test.ts` that had 7 failing tests before any new work was done
+
+**Root causes fixed in Task 32:**
+
+| Failure | Root Cause | Fix |
+|---------|-----------|-----|
+| Missing `@testing-library/user-event` | Package not installed | `npm install --save-dev @testing-library/user-event` |
+| Stale FRED cache test | Test wrote `{ data: {...}, fetchedAt: ... }` but `readFredCache()` stores raw `FredIndicatorData` directly (with `fetchedAt` inside it) | Corrected cache shape in test to match actual `fred.ts` format |
+| `isStorageFull()` always false | `vi.spyOn(localStorage, 'setItem')` doesn't intercept bare `localStorage.setItem` calls inside modules in jsdom | Replaced with `vi.stubGlobal('localStorage', throwingStorage)` to swap the entire global |
+| Req 18.14 FX unsupported currency | `vi.mock` inside a `describe` block is hoisted to file scope, so the mock applied globally and `fetchFxRate` was throwing instead of returning `null` | Moved `vi.mock('../api/frankfurter', ...)` to module scope; used `vi.mocked(fetchFxRate).mockResolvedValue(null)` in `beforeEach` |
+| Req 18.15/18.16 multiple element matches | `getByText(/CRITICAL/)` and `getByText(/WARNING/)` matched both the alert banner and the inline ratio label | Switched to `getByRole('alert')` + `toHaveTextContent()` for banner assertions; `getAllByText()` where multiple matches are expected |
+| Req 18.17/18.18 clipboard tests timing out | `userEvent.click` with `vi.useFakeTimers()` deadlocks — userEvent's internal async delays never resolve under fake timers | Replaced `userEvent.click` with `button.click()` + `act(async () => { await Promise.resolve(); })` to flush the clipboard microtask |
+
+- **65/65 tests passing** after all fixes
+- `vi.mock` for `../api/frankfurter` is now correctly declared at module scope — this is the only module-level mock in the test file; all other tests use `vi.spyOn` or `vi.stubGlobal` scoped to individual tests
+
+---
 
 - `MarketauxContext` follows the same provider/consumer hook pattern as `CutOffContext` — `useMarketauxArticles()` for reading, `useSetMarketauxArticles()` for writing
 - `MarketauxNewsFeed` writes fetched articles to `MarketauxContext` so `RailHealthCard` can surface relevant headlines for Degraded/Critical rails without prop drilling

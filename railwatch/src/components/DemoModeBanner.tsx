@@ -9,10 +9,10 @@ const DemoModeBanner = memo(function DemoModeBanner() {
     <div
       role="banner"
       aria-label="Demo mode notice"
-      className="w-full bg-yellow-400 text-yellow-900 text-center text-sm font-semibold py-2 px-4"
+      className="w-full bg-nymbus-navy border-b border-nymbus-teal/30 text-nymbus-teal/80 text-center text-xs font-medium py-1 px-4 tracking-widest uppercase"
       style={{ maxHeight: '48px' }}
     >
-      DEMO MODE — Simulated Data
+      Demo Mode — Simulated Data
     </div>
   );
 });

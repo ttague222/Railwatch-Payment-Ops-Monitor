@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --color-nymbus-navy:     #0A0F1E;
+  --color-nymbus-ink:      #111827;
+  --color-nymbus-teal:     #00C2B2;
+  --color-nymbus-teal-dim: #007A70;
+  --color-nymbus-slate:    #1E2A3A;
+  --color-nymbus-mist:     #F0F4F8;
+}
+
 /* Skeleton shimmer animation */
 .skeleton {
   background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);

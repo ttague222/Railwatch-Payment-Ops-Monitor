@@ -302,7 +302,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Verify data refresh updates values in place without full page re-render or scroll position loss
   - _Requirements: Req 16.1–16.8_
 
-- [ ] 32. Edge case verification — all 18 scenarios in Req 18
+- [x] 32. Edge case verification — all 18 scenarios in Req 18
   - Req 18.1–18.2: Verify "All Systems Normal" state renders correctly when all signals are green
   - Req 18.3: Verify Simulator exception is caught and full-page error state with Reload button is shown; no partial render
   - Req 18.4: Verify per-rail counts are used as authoritative when total mismatch is detected; console warning logged
@@ -319,7 +319,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
   - Req 18.17–18.18: Verify clipboard copy confirmation timing and deduplication
   - _Requirements: Req 18.1–18.18_
 
-- [ ] 33. Final checkpoint — full test suite and integration review
+- [x] 33. Final checkpoint — full test suite and integration review
   - Ensure all tests pass, ask the user if questions arise.
   - Verify Req 1.7 consistency invariant: sum of per-rail counts equals total transaction count
   - Verify Req 4.6 drill-down consistency: sum of individual transaction amounts equals group dollar exposure

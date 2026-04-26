@@ -7,7 +7,7 @@ const RailHealthOverview = memo(function RailHealthOverview() {
 
   return (
     <section aria-label="Rail Health Overview">
-      <h2 className="text-lg font-bold text-gray-900 mb-3">Rail Health Overview</h2>
+      <h2 className="text-sm font-bold uppercase tracking-widest text-nymbus-teal mb-3">Rail Health Overview</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {railData.map(rd => (
           <RailHealthCard key={rd.rail} data={rd} />

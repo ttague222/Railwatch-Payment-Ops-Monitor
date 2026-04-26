@@ -240,11 +240,11 @@ const DailySummaryExport = memo(function DailySummaryExport({ generatedAt }: Dai
     <>
       <section
         aria-label="Daily Summary Export"
-        className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm"
+        className="bg-white rounded-xl border border-gray-200 p-4 shadow-md"
       >
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Daily Summary Export</h2>
+            <h2 className="text-sm font-bold uppercase tracking-widest text-nymbus-teal">Daily Summary Export</h2>
             <p className="text-xs text-gray-500 mt-0.5">
               Copy a plain-text ops summary for standup or leadership email.
             </p>
@@ -254,10 +254,10 @@ const DailySummaryExport = memo(function DailySummaryExport({ generatedAt }: Dai
             onClick={handleCopy}
             aria-label="Copy daily summary to clipboard"
             className={`
-              inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-colors
+              inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-semibold transition-colors
               ${copyState === 'copied'
-                ? 'bg-green-100 text-green-800 border border-green-300'
-                : 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800'}
+                ? 'bg-emerald-500/10 text-emerald-700 ring-1 ring-emerald-500/30'
+                : 'bg-nymbus-teal hover:bg-nymbus-teal-dim text-nymbus-navy'}
             `}
           >
             {copyState === 'copied' ? (

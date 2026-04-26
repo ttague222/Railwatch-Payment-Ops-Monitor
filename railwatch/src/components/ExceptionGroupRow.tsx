@@ -36,10 +36,10 @@ function getSlaStatus(rail: PaymentRail, openedAt: string): SlaStatus {
   return 'ok';
 }
 
-const SLA_STYLES: Record<SlaStatus, { bg: string; text: string; label: string }> = {
-  ok:      { bg: 'bg-green-50',  text: 'text-green-700',  label: 'OK'      },
-  warning: { bg: 'bg-yellow-50', text: 'text-yellow-700', label: 'Warning' },
-  breach:  { bg: 'bg-red-50',    text: 'text-red-700',    label: 'Breach'  },
+const SLA_STYLES: Record<SlaStatus, { accentBg: string; badge: string; label: string }> = {
+  ok:      { accentBg: 'bg-emerald-500', badge: 'bg-emerald-500/10 text-emerald-700 ring-1 ring-emerald-500/30', label: 'OK'      },
+  warning: { accentBg: 'bg-amber-400',   badge: 'bg-amber-400/10  text-amber-700  ring-1 ring-amber-400/30',   label: 'Warning' },
+  breach:  { accentBg: 'bg-red-500',     badge: 'bg-red-500/10    text-red-700    ring-1 ring-red-500/30',     label: 'Breach'  },
 };
 
 const NAMESPACE_STYLES: Record<string, string> = {
@@ -67,7 +67,9 @@ const ExceptionGroupRow = memo(function ExceptionGroupRow({
   }
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border border-gray-200 rounded-xl overflow-hidden shadow-md">
+      {/* Colored accent bar across the top */}
+      <div className={`h-1 w-full ${slaStyle.accentBg}`} aria-hidden="true" />
       {/* Row header — clickable */}
       <div
         role="button"
@@ -75,7 +77,7 @@ const ExceptionGroupRow = memo(function ExceptionGroupRow({
         aria-expanded={isExpanded}
         onClick={onToggle}
         onKeyDown={handleKeyDown}
-        className="flex items-center justify-between px-4 py-3 bg-white hover:bg-gray-50 cursor-pointer select-none"
+        className="flex items-center justify-between px-4 py-3 bg-white hover:bg-nymbus-mist cursor-pointer select-none"
       >
         {/* Left: rail + reason code */}
         <div className="flex items-center gap-3 min-w-0">
@@ -97,7 +99,7 @@ const ExceptionGroupRow = memo(function ExceptionGroupRow({
 
           {/* Namespace badge */}
           <span
-            className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${nsStyle}`}
+            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${nsStyle}`}
           >
             {group.reasonCodeNamespace}
           </span>
@@ -107,14 +109,14 @@ const ExceptionGroupRow = memo(function ExceptionGroupRow({
         <div className="flex items-center gap-4 shrink-0 ml-4">
           <div className="text-right">
             <div className="text-xs text-gray-500">Count</div>
-            <div className="text-sm font-semibold text-gray-900">{group.count}</div>
+            <div className="text-sm font-semibold tabular-nums text-gray-900">{group.count}</div>
           </div>
           <div className="text-right">
             <div className="text-xs text-gray-500">Exposure</div>
-            <div className="text-sm font-semibold text-gray-900">{formatUSD(group.dollarExposure)}</div>
+            <div className="text-sm font-semibold tabular-nums text-gray-900">{formatUSD(group.dollarExposure)}</div>
           </div>
           <span
-            className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${slaStyle.bg} ${slaStyle.text}`}
+            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${slaStyle.badge}`}
             aria-label={`SLA status: ${slaStyle.label}`}
           >
             {slaStyle.label}

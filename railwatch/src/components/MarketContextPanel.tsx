@@ -37,13 +37,13 @@ function MarketContextPanel() {
 
   return (
     <section aria-label="Market Context Panel">
-      <h2 className="text-lg font-bold text-gray-900 mb-4">Market Context</h2>
+      <h2 className="text-sm font-bold uppercase tracking-widest text-nymbus-teal mb-4">Market Context</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
         {/* ── Section 1: Fed Funds Rate ──────────────────────────────────── */}
         <div>
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
             Economic Indicator
           </h3>
           <ApiErrorBoundary source="fred">
@@ -53,7 +53,7 @@ function MarketContextPanel() {
 
         {/* ── Section 2: Wire International FX ──────────────────────────── */}
         <div>
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
             Wire International FX
           </h3>
           <ApiErrorBoundary source="frankfurter">
@@ -67,7 +67,7 @@ function MarketContextPanel() {
 
         {/* ── Section 3: Industry News ───────────────────────────────────── */}
         <div>
-          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
             Industry News
           </h3>
           <ApiErrorBoundary source="marketaux">
@@ -111,7 +111,7 @@ function WireIntlFxSummary({ currencies }: { currencies: string[] }) {
         {currencies.map(currency => (
           <li
             key={currency}
-            className="inline-flex items-center rounded bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700 border border-blue-100"
+            className="inline-flex items-center rounded-full bg-nymbus-teal/10 px-2 py-1 text-xs font-semibold text-nymbus-teal-dim ring-1 ring-nymbus-teal/30"
           >
             USD → {currency}
           </li>

@@ -88,8 +88,8 @@ const StatusBar = memo(function StatusBar({ generatedAt, onRefresh }: StatusBarP
 
   // ── Coverage ratio display helpers ────────────────────────────────────────
   const ratioLabel = `${formatPercent(fundingCoverageRatio)}`;
-  const ratioCritical = fundingCoverageRatio < 100;
-  const ratioWarning = fundingCoverageRatio >= 100 && fundingCoverageRatio < 110;
+  const ratioCritical = fundingCoverageRatio <= 100;  // <= 100 means critical (includes exactly 100, Req 18.15)
+  const ratioWarning = fundingCoverageRatio > 100 && fundingCoverageRatio < 110;
 
   // ── Cut-off signal display ────────────────────────────────────────────────
   const cutOffLabel = (() => {
@@ -103,7 +103,7 @@ const StatusBar = memo(function StatusBar({ generatedAt, onRefresh }: StatusBarP
     <div
       role="banner"
       aria-label="Dashboard Status Bar"
-      className="flex items-center justify-between px-4 bg-gray-900 text-white border-b border-gray-700"
+      className="flex items-center justify-between px-4 bg-nymbus-navy text-white border-b border-nymbus-teal/20 border-l-4 border-l-nymbus-teal"
       style={{ height: '48px', maxHeight: '48px', minHeight: '48px' }}
     >
       {/* Left: four signals */}
@@ -203,7 +203,7 @@ const StatusBar = memo(function StatusBar({ generatedAt, onRefresh }: StatusBarP
           className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-medium transition-colors ${
             refreshing
               ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-              : 'bg-blue-600 hover:bg-blue-500 text-white cursor-pointer'
+              : 'bg-nymbus-teal hover:bg-nymbus-teal-dim text-nymbus-navy font-semibold cursor-pointer'
           }`}
         >
           {refreshing ? (

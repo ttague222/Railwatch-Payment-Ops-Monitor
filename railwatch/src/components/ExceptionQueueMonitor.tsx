@@ -95,12 +95,10 @@ const ExceptionQueueMonitor = memo(function ExceptionQueueMonitor() {
       .slice(0, 5);
   }, [groups]);
 
-  // ── Render ─────────────────────────────────────────────────────────────────
-
   return (
     <section aria-label="Exception Queue Monitor">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-bold text-gray-900">Exception Queue</h2>
+        <h2 className="text-sm font-bold uppercase tracking-widest text-nymbus-teal">Exception Queue</h2>
         <button
           onClick={() => setSortMode(m => m === 'sla' ? 'exposure' : 'sla')}
           className="text-xs px-3 py-1.5 rounded border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-medium"
@@ -112,14 +110,14 @@ const ExceptionQueueMonitor = memo(function ExceptionQueueMonitor() {
 
       {/* Queue growth alert (Req 6.13) */}
       {queueGrowthAlert && (
-        <div className="mb-3 px-3 py-2 rounded bg-yellow-50 text-yellow-700 text-sm font-medium border border-yellow-200">
+        <div className="mb-3 border-l-4 border-amber-400 bg-amber-400/5 text-amber-700 text-sm font-medium px-4 py-2 rounded-r">
           ⚠ Queue growth alert — current exceptions ({totalCount}) exceed 125% of prior-day closing count ({priorDayTotal})
         </div>
       )}
 
       {/* All-clear (Req 6.14) */}
       {totalCount === 0 && (
-        <div className="mb-3 px-3 py-2 rounded bg-green-50 text-green-700 text-sm font-medium border border-green-200">
+        <div className="mb-3 border-l-4 border-emerald-500 bg-emerald-500/5 text-emerald-700 text-sm font-medium px-4 py-2 rounded-r">
           ✓ All clear — no open exceptions
         </div>
       )}
@@ -128,34 +126,34 @@ const ExceptionQueueMonitor = memo(function ExceptionQueueMonitor() {
       {totalCount > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           {/* Total count */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-            <div className="text-xs text-gray-500 mb-1">Total Exceptions</div>
-            <div className="text-2xl font-bold text-gray-900">{totalCount}</div>
+          <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-md">
+            <div className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Total Exceptions</div>
+            <div className="text-2xl font-bold tabular-nums text-gray-900">{totalCount}</div>
           </div>
 
           {/* Per-rail breakdown */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-            <div className="text-xs text-gray-500 mb-2">By Rail</div>
+          <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-md">
+            <div className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">By Rail</div>
             <div className="space-y-1">
               {[...railStats.entries()].map(([rail, stats]) => (
                 <div key={rail} className="flex justify-between text-xs">
                   <span className="text-gray-700">{rail.replace(/_/g, ' ')}</span>
-                  <span className="font-medium text-gray-900">{stats.count}</span>
+                  <span className="font-medium tabular-nums text-gray-900">{stats.count}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Top 5 reason codes */}
-          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-            <div className="text-xs text-gray-500 mb-2">Top Reason Codes</div>
+          <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-md">
+            <div className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">Top Reason Codes</div>
             <div className="space-y-1">
               {topReasonCodes.map(([code, count], i) => (
                 <div key={code} className="flex justify-between text-xs">
                   <span className="text-gray-700 font-mono">
                     {i + 1}. {code}
                   </span>
-                  <span className="font-medium text-gray-900">{count}</span>
+                  <span className="font-medium tabular-nums text-gray-900">{count}</span>
                 </div>
               ))}
             </div>
@@ -165,13 +163,13 @@ const ExceptionQueueMonitor = memo(function ExceptionQueueMonitor() {
 
       {/* Dollar exposure per rail */}
       {totalCount > 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm mb-4">
-          <div className="text-xs text-gray-500 mb-2">Dollar Exposure by Rail</div>
+        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-md mb-4">
+          <div className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">Dollar Exposure by Rail</div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {[...railStats.entries()].map(([rail, stats]) => (
               <div key={rail} className="text-xs">
                 <div className="text-gray-500">{rail.replace(/_/g, ' ')}</div>
-                <div className="font-semibold text-gray-900">{formatUSD(stats.exposure)}</div>
+                <div className="font-semibold tabular-nums text-gray-900">{formatUSD(stats.exposure)}</div>
               </div>
             ))}
           </div>

@@ -49,9 +49,9 @@ const STATE_STYLES: Record<CountdownState, string> = {
 };
 
 const STATE_BADGE: Record<CountdownState, string> = {
-  neutral:  'bg-gray-100 text-gray-600',
-  warning:  'bg-yellow-100 text-yellow-800',
-  critical: 'bg-red-100 text-red-800',
+  neutral:  'bg-nymbus-mist text-gray-600',
+  warning:  'bg-amber-400/10 text-amber-700 ring-1 ring-amber-400/30',
+  critical: 'bg-red-500/10 text-red-700 ring-1 ring-red-500/30',
   closed:   'bg-gray-100 text-gray-400',
 };
 
@@ -136,8 +136,8 @@ export default function CutOffTimeMonitor() {
   if (!businessDay) {
     const nextDay = getNextBusinessDay(today);
     return (
-      <section aria-label="Cut-Off Time Monitor" className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-        <h2 className="text-sm font-semibold text-gray-900 mb-3">Cut-Off Times</h2>
+      <section aria-label="Cut-Off Time Monitor" className="bg-white rounded-xl border border-gray-200 p-4 shadow-md">
+        <h2 className="text-sm font-bold uppercase tracking-widest text-nymbus-teal mb-3">Cut-Off Times</h2>
         <div className="text-sm text-gray-500 italic">
           Non-business day — cut-off countdowns resume on {nextDay}.
         </div>
@@ -151,8 +151,8 @@ export default function CutOffTimeMonitor() {
   ];
 
   return (
-    <section aria-label="Cut-Off Time Monitor" className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-      <h2 className="text-sm font-semibold text-gray-900 mb-3">Cut-Off Times</h2>
+    <section aria-label="Cut-Off Time Monitor" className="bg-white rounded-xl border border-gray-200 p-4 shadow-md">
+      <h2 className="text-sm font-bold uppercase tracking-widest text-nymbus-teal mb-3">Cut-Off Times</h2>
 
       <div className="space-y-3">
         {railOrder.map(rail => {
