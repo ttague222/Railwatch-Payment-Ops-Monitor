@@ -6,7 +6,7 @@ Implement the RailWatch single-page React/TypeScript application in dependency o
 
 ## Tasks
 
-- [ ] 1. Project scaffolding — Vite + React + TypeScript, folder structure, Tailwind, Recharts
+- [-] 1. Project scaffolding — Vite + React + TypeScript, folder structure, Tailwind, Recharts
   - Scaffold with `npm create vite@latest railwatch -- --template react-ts`
   - Install dependencies: `recharts`, `tailwindcss`, `postcss`, `autoprefixer`
   - Create folder structure: `src/types/`, `src/simulator/`, `src/providers/`, `src/context/`, `src/components/`, `src/api/`, `src/utils/`

@@ -335,8 +335,8 @@ The design document was built section by section with explicit approval gates be
 |----------|--------|
 | `requirements.md` | ✅ Complete — 18 requirements, 6 review rounds (QA, Engineer, Ops Manager, Architect, PM, Skeptic, UX, CRO, Sales Engineer) |
 | `design.md` | ✅ Complete — 8 sections, approved |
-| `tasks.md` | ⬜ Not started — pending generation |
-| Application code | ⬜ Not started |
+| `tasks.md` | ✅ Complete — 35 tasks (33 + tasks 1a and 25a), 3 risk tasks flagged (5, 9, 17) |
+| Application code | 🔄 In progress — Task 1 starting now |
 | `README.md` | ⬜ Not started |
 | GitHub repo | ✅ Live at github.com/ttague222/railwatch-payment-ops-monitor |
 
