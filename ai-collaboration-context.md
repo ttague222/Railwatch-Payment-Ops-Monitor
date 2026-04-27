@@ -374,7 +374,7 @@ If RailWatch were a real product moving toward production, the following capabil
 ### Git Repository
 - Initialized locally with initial commit
 - `.gitignore` added to exclude `.kiro/settings/` (contains API keys)
-- Pushed to GitHub: https://github.com/ttague222/railwatch-payment-ops-monitor
+- Pushed to GitHub: https://github.com/ttague222/RailWatch-Payment-Operations-Monitor
 
 ### GitHub MCP
 - Configured at `.kiro/settings/mcp.json` (excluded from git)
@@ -428,7 +428,7 @@ The design document was built section by section with explicit approval gates be
 | Application code | ✅ Complete — all tasks 1–33 implemented and verified |
 | Nymbus UX alignment | ✅ Complete — full visual redesign applied post-implementation (see Session 5 below) |
 | `README.md` | ✅ Complete — at repo root, renders on GitHub homepage |
-| GitHub repo | ✅ Live at github.com/ttague222/railwatch-payment-ops-monitor |
+| GitHub repo | ✅ Live at github.com/ttague222/RailWatch-Payment-Operations-Monitor |
 
 ---
 

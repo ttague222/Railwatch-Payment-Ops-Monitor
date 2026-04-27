@@ -64,7 +64,7 @@ All payment data is realistically simulated for a fictional $3B credit union (La
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/ttague222/railwatch-payment-ops-monitor.git
+git clone https://github.com/ttague222/RailWatch-Payment-Operations-Monitor.git
 
 # 2. Navigate into the repo
 cd railwatch-payment-ops-monitor
