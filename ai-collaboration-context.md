@@ -4,6 +4,18 @@ This file documents the thought process, decisions, research, and iterations mad
 
 ---
 
+## How I Collaborated with AI
+
+The AI's first pass at problem discovery produced five consumer-facing pain points — member financial anxiety, loan friction, emergency savings gaps. All technically valid fintech problems, but wrong. I stopped the process and redirected: the real customer here is the institution, not the end member, and the problem worth solving is operational, not consumer-facing. That redirect wasn't a prompt tweak — it was a judgment call about who actually has budget, who has daily pain, and what Nymbus actually sells. The AI generated good research once I pointed it at the right user. It couldn't have made that call on its own.
+
+The bigger redirect came mid-project. After a full requirements pass on PayPath — an instant payments readiness tracker — I recognized the product had a fundamental flaw: a user fills it out once and never comes back. It has no recurring value. I cut the entire spec, scrapped the work, and reframed around a daily ops monitor. The AI did not surface this problem. I did, by asking one question: "Would a VP of Payments open this every day?" The answer for PayPath was no. That question, and the willingness to throw away completed work to answer it correctly, is the judgment the AI cannot provide.
+
+Rather than asking the AI to review requirements generically, I directed it to simulate six distinct roles simultaneously — QA Engineer, Software Engineer, Payments Operations Manager, Solutions Architect, Product Manager, and a Skeptic persona specifically tasked with finding logical contradictions. I then ran additional passes with a UX Designer, CRO, and Sales Engineer. This produced 14 concrete spec changes that a single review pass would have missed entirely: the missing dollar exposure field in the exception queue (the Ops Manager called count-without-value useless), the ACH Same Day SLA threshold error (it had been lumped with ACH Standard at 72 hours instead of the correct 8), and the DataProvider interface framing that makes the Nymbus Connect integration story concrete for a sales conversation. Each of those changes came from directing the AI to inhabit a specific perspective, not from asking it to "review the requirements."
+
+There were also moments where I explicitly overrode what the AI produced or suggested. The FRED and Frankfurter APIs were initially scoped as standalone market context panels — I cut them down to single contextual indicators after the Ops Manager persona correctly identified them as noise for a daily ops workflow. I rejected the cross-border payments problem despite the AI generating strong research on it, because the transaction frequency is wrong for a community credit union's daily use case — high drama, low volume, not a morning dashboard problem. And when the Sales Engineer persona suggested softening or removing the Demo Mode label to improve credibility in a demo, I kept it. Compliance and honesty with the reviewer mattered more than polish. The AI surfaces options; I decide which ones are right.
+
+---
+
 ## Assignment
 
 **Source:** AI-First Product Owner — Take-Home Assessment  
