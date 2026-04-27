@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const params = new URLSearchParams(req.url.split('?')[1] || '');
-  const upstream = `https://api.frankfurter.dev/latest?${params.toString()}`;
+  const upstream = `https://api.frankfurter.dev/v1/latest?${params.toString()}`;
 
   try {
     const response = await fetch(upstream);
