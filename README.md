@@ -2,6 +2,8 @@
 
 ![CI](https://github.com/ttague222/railwatch-payment-ops-monitor/actions/workflows/ci.yml/badge.svg)
 
+**Live demo:** https://railwatch-payment-ops-monitor.vercel.app
+
 A real-time payment operations dashboard for community banks and credit unions. Built as a take-home assessment for the AI-First Product Owner role at Nymbus.
 
 ---
