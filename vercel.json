@@ -3,22 +3,22 @@
   "outputDirectory": "railwatch/dist",
   "framework": "vite",
   "installCommand": "echo 'install handled in buildCommand'",
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/fred/(.*)",
-      "dest": "https://api.stlouisfed.org/fred/$1"
+      "source": "/api/fred/:path*",
+      "destination": "https://api.stlouisfed.org/fred/:path*"
     },
     {
-      "src": "/api/marketaux/(.*)",
-      "dest": "https://api.marketaux.com/$1"
+      "source": "/api/marketaux/:path*",
+      "destination": "https://api.marketaux.com/:path*"
     },
     {
-      "src": "/api/frankfurter/(.*)",
-      "dest": "https://api.frankfurter.dev/$1"
+      "source": "/api/frankfurter/:path*",
+      "destination": "https://api.frankfurter.dev/:path*"
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
