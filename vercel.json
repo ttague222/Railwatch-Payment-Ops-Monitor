@@ -2,5 +2,15 @@
   "buildCommand": "cd railwatch && npm install && npm run build",
   "outputDirectory": "railwatch/dist",
   "framework": "vite",
-  "installCommand": "echo 'install handled in buildCommand'"
+  "installCommand": "echo 'install handled in buildCommand'",
+  "rewrites": [
+    {
+      "source": "/api/fred/:path*",
+      "destination": "https://api.stlouisfed.org/:path*"
+    },
+    {
+      "source": "/api/marketaux/:path*",
+      "destination": "https://api.marketaux.com/:path*"
+    }
+  ]
 }
